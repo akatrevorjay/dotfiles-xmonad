@@ -43,7 +43,6 @@ import XMonad.Layout.Spiral
 import XMonad.Layout.Tabbed
 import XMonad.Layout.ThreeColumns
 --import XMonad.Layout.DwmStyle
-import XMonad.Layout.Dishes
 
 import XMonad.Layout.LayoutCombinators hiding ( (|||) )
 
@@ -55,7 +54,6 @@ import XMonad.Util.Run
 import XMonad.Util.EZConfig
 import XMonad.Util.Themes
 --import XMonad.Util.Scratchpad
-import XMonad.Util.Dzen
 
 import Data.Ratio((%))
 import Data.Monoid
@@ -63,29 +61,29 @@ import System.IO
 
 import qualified Data.Map as M
 import qualified XMonad.StackSet as W
-
+ 
 --myManageHook = scratchpadManageHook (W.RationalRect 0.125 0.125 0.75 0.75) <+>
 myManageHook = composeAll
-	[ className =? "ClockScreenlet.py"	--> doFloat
---	, className =? "Gnome-panel"		--> doFloat
-	, className =? "rdesktop"			--> doFloat
-	, className =? "Xmessage"			--> doFloat
-	, className =? "Tilda"				--> doFloat
-	, className =? "mplayer"			--> doFloat
-	, className =? "gmplayer"			--> doFloat
-	, className =? "vlc"				--> doFloat
-	, className =? "glxgears"			--> doFloat
-	, className =? "Vncviewer"			--> doFloat
-	, className =? "com-limegroup-gnutella-gui-Main" --> doFloat
-	-- , className =? "Vmware"			--> doFullFloat
-	, className =? "Unity-2d-panel"	--> doIgnore
-	, className =? "Unity-2d-launcher" --> doIgnore
+    [ className =? "ClockScreenlet.py"	--> doFloat
+--    , className =? "Gnome-panel"		--> doFloat
+    , className =? "rdesktop"			--> doFloat
+    , className =? "Xmessage"			--> doFloat
+    , className =? "Tilda"				--> doFloat
+    , className =? "mplayer"			--> doFloat
+    , className =? "gmplayer"			--> doFloat
+    , className =? "vlc"				--> doFloat
+    , className =? "glxgears"			--> doFloat
+    , className =? "Vncviewer"			--> doFloat
+    , className =? "com-limegroup-gnutella-gui-Main" --> doFloat
+    -- , className =? "Vmware"			--> doFullFloat
+	, className =? "Unity-2d-panel"    --> doIgnore
+    , className =? "Unity-2d-launcher" --> doIgnore
 	, className =? "xmobar" --> doIgnore
 	, className =? "dzen2" --> doIgnore
 	, className =? "Guake.py" --> doFloat
 	, isFullscreen --> doFullFloat
-	, isDialog --> doCenterFloat
-	]
+    , isDialog --> doCenterFloat
+    ]
 
 mylayoutHook =
 	( desktopLayoutModifiers -- $ dwmStyle shrinkText (theme xmonadTheme)
@@ -94,7 +92,7 @@ mylayoutHook =
 	$ withIM (0.11) (Role "gimp-toolbox")
 	$ reflectHoriz $ withIM (0.15) (Role "gimp-dock") $ reflectHoriz
 
-	$ tall ||| tabbed ||| grid1 ||| threecol ||| accordion ||| spiral1 ||| hinttall ||| centhinttall ||| fullcenthinttall ||| tiled ||| dishes
+	$ tall ||| tabbed ||| grid1 ||| threecol ||| accordion ||| spiral1 ||| hinttall ||| centhinttall ||| fullcenthinttall
 	)
 	where
 		tall = Tall 1 (3/100) (1/2)
@@ -109,13 +107,6 @@ mylayoutHook =
 		hinttall = layoutHints (Tall 1 (3/100) (1/2))
 		centhinttall = layoutHintsToCenter (Tall 1 (3/100) (1/2))
 		fullcenthinttall = layoutHintsToCenter (Tall 1 (3/100) (1/2))
-		tiled = Tall nmaster delta tiled_ratio
-		dishes = Dishes nmaster dishes_ratio
-		nmaster = 1
-		delta = 1/100
-		tiled_ratio = 1/2
-		dishes_ratio = 1/5
-
 
 fullFloatFocused = withFocused $ \f -> windows =<< appEndo `fmap` runQuery doFullFloat f
 centerFloatFocused = withFocused $ \f -> windows =<< appEndo `fmap` runQuery doCenterFloat f
@@ -128,65 +119,74 @@ myEZKeymap conf =
 	]
 
 myEZKeys =
-	[ ((mod4Mask, xK_grave), spawn "gnome-terminal")
-	, ((mod4Mask .|. shiftMask, xK_grave), spawn "gnome-terminal -e byobu")
-	, ((mod4Mask .|. shiftMask, xK_l), spawn "gnome-screensaver-command -l")
-	, ((mod4Mask .|. shiftMask, xK_g), spawn "gtg")
-	, ((mod4Mask .|. shiftMask, xK_t), spawn "hamster-time-tracker")
+    [ ((mod4Mask, xK_grave), spawn "gnome-terminal")
+    , ((mod4Mask .|. shiftMask, xK_grave), spawn "gnome-terminal -e byobu")
+    , ((mod4Mask .|. shiftMask, xK_l), spawn "gnome-screensaver-command -l")
+    , ((mod4Mask .|. shiftMask, xK_g), spawn "gtg")
+    , ((mod4Mask .|. shiftMask, xK_t), spawn "hamster-time-tracker")
 
-	-- , ((controlMask, xK_Print), spawn "sleep 0.2; scrot -s")
-	-- , ((0, xK_Print), spawn "scrot")
+    -- , ((controlMask, xK_Print), spawn "sleep 0.2; scrot -s")
+    -- , ((0, xK_Print), spawn "scrot")
 
-	-- moving workspaces
-	, ((mod4Mask, xK_Left), prevWS )
-	, ((mod4Mask, xK_Right), nextWS )
-	, ((mod4Mask .|. shiftMask, xK_Left), shiftToPrev )
-	, ((mod4Mask .|. shiftMask, xK_Right), shiftToNext )
+    -- moving workspaces
+    , ((mod4Mask, xK_Left), prevWS )
+    , ((mod4Mask, xK_Right), nextWS )
+    , ((mod4Mask .|. shiftMask, xK_Left), shiftToPrev )
+    , ((mod4Mask .|. shiftMask, xK_Right), shiftToNext )
 
-	-- tranparency via transset
-	--, ((mod4Mask, xK_Up), spawn "transset-df -a --dec .1")
-	--, ((mod4Mask, xK_Down), spawn "transset-df -a --inc .1")
+    -- tranparency via transset
+    --, ((mod4Mask, xK_Up), spawn "transset-df -a --dec .1")
+    --, ((mod4Mask, xK_Down), spawn "transset-df -a --inc .1")
 
-	-- layout Maximize
-	, ((mod4Mask, xK_a), withFocused (sendMessage . maximizeRestore))
-	-- fullfloat
-	, ((mod4Mask, xK_f), fullFloatFocused)
-	, ((mod4Mask, xK_c), centerFloatFocused)
-	, ((mod4Mask, xK_r), runOrRaisePrompt defaultXPConfig)
-	, ((mod4Mask, xK_w), kill)
-	--, ((mod4Mask, xK_t), themePrompt defaultXPConfig)
+    -- layout Maximize
+    , ((mod4Mask, xK_a), withFocused (sendMessage . maximizeRestore))
+    -- fullfloat
+    , ((mod4Mask, xK_f), fullFloatFocused)
+    , ((mod4Mask, xK_c), centerFloatFocused)
+    , ((mod4Mask, xK_r), runOrRaisePrompt defaultXPConfig)
+    , ((mod4Mask, xK_w), kill)
+    --, ((mod4Mask, xK_t), themePrompt defaultXPConfig)
 
-	--, ((mod4Mask .|. shiftMask, xK_a), renameWorkspace defaultXPConfig)
-	--, ((mod4Mask, xK_d), viewEmptyWorkspace)
-	, ((mod4Mask, xK_x), shellPrompt defaultXPConfig)
-	, ((mod4Mask .|. shiftMask, xK_x), xmonadPrompt defaultXPConfig)
-	, ((mod4Mask .|. shiftMask, xK_v), windowPromptBring defaultXPConfig)
-	, ((mod4Mask, xK_v), windowPromptGoto defaultXPConfig)
-	, ((mod4Mask, xK_u), workspacePrompt defaultXPConfig (windows . W.greedyView))
+    --, ((mod4Mask .|. shiftMask, xK_a), renameWorkspace defaultXPConfig)
+    --, ((mod4Mask, xK_d), viewEmptyWorkspace)
+    , ((mod4Mask, xK_x), shellPrompt defaultXPConfig)
+    , ((mod4Mask .|. shiftMask, xK_x), xmonadPrompt defaultXPConfig)
+    , ((mod4Mask .|. shiftMask, xK_v), windowPromptBring defaultXPConfig)
+    , ((mod4Mask, xK_v), windowPromptGoto defaultXPConfig)
+    , ((mod4Mask, xK_u), workspacePrompt defaultXPConfig (windows . W.greedyView))
 	, ((mod4Mask, xK_s), sshPrompt defaultXPConfig)
 	]
 	-- ++ M.toList (planeKeys mod4Mask GConf Finite)
 
+myConfig = ewmh gnomeConfig
+    { manageHook = myManageHook <+> manageHook gnomeConfig
+    , layoutHook = mylayoutHook
+    , modMask = mod4Mask
+    , terminal = "gnome-terminal"
+	--, keys = \c -> azertyKeys c `M.union` keys gnomeConfig c
+	, workspaces = ["sh", "web", "todo", "four", "five", "six", "seven", "eight", "nine"]
+	}
+	`additionalKeysP` myEZKeysP
+	`additionalKeys` myEZKeys
+
 myLogHook_dzen h = dynamicLogWithPP $ defaultPP {
-			  ppCurrent  = dzenColor "#ffffff" "#000000" . pad
-			, ppVisible  = dzenColor "#888888" "#000000" . pad
-			, ppHidden   = dzenColor "#888888" "#000000" . pad
-			--, ppHiddenNoWindows = dzenColor "#888888"  "#000000" . pad
+              ppCurrent  = dzenColor "#ffffff" "#000000" . pad
+            , ppVisible  = dzenColor "#888888" "#000000" . pad
+            , ppHidden   = dzenColor "#888888" "#000000" . pad 
+            --, ppHiddenNoWindows = dzenColor "#888888"  "#000000" . pad
 			, ppSep		 = " | "
-			, ppUrgent   = dzenColor "#ff0000" "#000000"
-			, ppOutput   = hPutStrLn h
-			}
-			where
-	  			fill :: String -> Int -> String
-	  			fill h i = "^p(" ++ show i ++ ")" ++ h ++ "^p(" ++ show i ++ ")"
+            , ppUrgent   = dzenColor "#ff0000" "#000000"
+		    , ppOutput   = hPutStrLn h
+            }
+            where
+      			fill :: String -> Int -> String
+      			fill h i = "^p(" ++ show i ++ ")" ++ h ++ "^p(" ++ show i ++ ")"
 
 -- Color, font and iconpath definitions:
 --myFont = "-xos4-terminus-medium-r-normal-*-14-*-*-*-c-*-iso10646-1"
 --myFont = "-*-montecarlo-medium-r-normal-*-11-*-*-*-c-*-*-*"
---myFont = "-misc-fixed-*-r-normal-*-10-*-*-*-*-*-*-*"
---myFont = "Envy Code R for Powerline"
-myFont = "Fixed"
-myIconDir = "/home/trevorj/.dzenstatus/bitmaps"
+myFont = "-misc-fixed-*-r-normal-*-10-*-*-*-*-*-*-*"
+myIconDir = "/home/trevorj/.dzen"
 myDzenFGColor = "#555555"
 myDzenBGColor = "#222222"
 myNormalFGColor = "#ffffff"
@@ -198,25 +198,25 @@ myUrgentBGColor = "#0077ff"
 myIconFGColor = "#777777"
 myIconBGColor = "#0f0f0f"
 mySeperatorColor = "#555555"
-{-myEvents = "-l 10 -u -m"-}
+--myEvents = "-l 10 -u -m"
 myEvents = ""
---myStatusBar = "dzen2 -ta l -p -x 0 -y 0 -w 1897 -h 25 -fn '-*-Fixed-Bold-R-Normal-*-13-*-*-*-*-*-*-*'"
-myStatusBar = "dzen2 -x '400' -y '0' -h '16' -w '900' -ta 'l' -fg '" ++ myNormalFGColor ++ "' -bg '" ++ myNormalBGColor ++ "' -fn '" ++ myFont ++ "' " ++ myEvents
+-- myStatusBar = "dzen2 -ta l -p -x 0 -y 0 -w 1897 -h 25 -fn '-*-Fixed-Bold-R-Normal-*-13-*-*-*-*-*-*-*'"
+-- myStatusBar = "dzen2 -x '400' -y '0' -h '16' -w '1300' -ta 'l' -fg '" ++ myNormalFGColor ++ "' -bg '" ++ myNormalBGColor ++ "' -fn '" ++ myFont ++ "' " ++ myEvents
 myLogHook_dzen2 h = dynamicLogWithPP $ defaultPP {
 	  ppCurrent  = dzenColor "#222222" "white" . pad
 	, ppVisible  = dzenColor "white" "black" . pad
-	, ppHidden   = dzenColor "lightblue" "#222222" . pad
+	, ppHidden   = dzenColor "lightblue" "#222222" . pad 
 	--, ppHiddenNoWindows = dzenColor "#777777"  "#222222" . pad
 	, ppUrgent   = dzenColor "red" "yellow"
---	, ppWsSep	= " | "
-	, ppSep	  = " | "
+--	, ppWsSep    = " | "
+	, ppSep      = " | "
 	, ppLayout   = dzenColor "lightblue" "#222222"
-				{-(\ x -> fill (case x of					-}
-				{-   "Tall"	   -> icon "tall.xbm"			-}
-				{-   "Mirror Tall"		-> icon "mtall.xbm"-}
-				{-   "Full"	   -> icon "full.xbm"			-}
-				{-   _			-> pad x) 4)				  -}
-	, ppTitle	= dzenEscape
+--				(\ x -> fill (case x of
+--			       "Tall"	   -> icon "tall.xbm"
+--			       "Mirror Tall"        -> icon "mtall.xbm"
+--			       "Full"	   -> icon "full.xbm"
+--			       _	        -> pad x) 4)
+	, ppTitle    = dzenEscape
 	, ppOutput   = hPutStrLn h
 	}
 	where
@@ -232,32 +232,16 @@ myLogHook_xmobar h = (dynamicLogWithPP $ xmobarPP
   })-- >> updatePointer (TowardsCentre 1 1)
 
 
---myStatusBar = "dzenstatus"
-myLogHook_dzenstatus h = dynamicLogWithPP $ defaultPP
-
-
-myConfig = ewmh gnomeConfig
-	{ manageHook = myManageHook <+> manageHook gnomeConfig
-	, layoutHook = mylayoutHook
-	, modMask = mod4Mask
-	, terminal = "gnome-terminal"
-	--, keys = \c -> azertyKeys c `M.union` keys gnomeConfig c
-	, workspaces = ["sh", "web", "todo", "four", "five", "six", "seven", "eight", "nine"]
-	{-, normalBorderColor   = colorNormalBorder-}
-	{-, focusedBorderColor  = colorFocusedBorder-}
-	{-, borderWidth		 = 2-}
-	}
-	`additionalKeysP` myEZKeysP
-	`additionalKeys` myEZKeys
-
+myStatusBar = "dzenstatus"
+myLogHook_dzenstatus h = dynamicLogWithPP
 
 
 main = do
 	dzen <- spawnPipe myStatusBar
 	xmonad $ myConfig {
-		-- logHook = myLogHook_dzenstatus dzen >> logHook desktopConfig
-		logHook = myLogHook_dzen2 dzen >> logHook desktopConfig
+        logHook = myLogHook_dzenstatus dzen >> logHook desktopConfig
+        -- logHook = myLogHook_dzen2 dzen >> logHook desktopConfig
 		-- logHook = myLogHook_xmobar xmproc >> logHook desktopConfig
-		}
+        }
 
 
