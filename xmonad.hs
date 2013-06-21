@@ -133,8 +133,8 @@ myEZKeymap conf =
 	]
 
 myEZKeys =
-	[ ((mod4Mask, xK_grave), spawn "gnome-terminal")
-	, ((mod4Mask .|. shiftMask, xK_grave), spawn "gnome-terminal -e byobu")
+	[ ((mod4Mask, xK_grave), spawn "sakura")
+	, ((mod4Mask .|. shiftMask, xK_grave), spawn "sakura -e byobu")
 	, ((mod4Mask .|. shiftMask, xK_l), spawn "gnome-screensaver-command -l")
 	, ((mod4Mask .|. shiftMask, xK_g), spawn "gtg")
 	, ((mod4Mask .|. shiftMask, xK_t), spawn "hamster-time-tracker")
@@ -206,7 +206,8 @@ mySeperatorColor = "#555555"
 {-myEvents = "-l 10 -u -m"-}
 myEvents = ""
 --myStatusBar = "dzen2 -ta l -p -x 0 -y 0 -w 1897 -h 25 -fn '-*-Fixed-Bold-R-Normal-*-13-*-*-*-*-*-*-*'"
-myStatusBar = "dzen2 -x '400' -y '0' -h '16' -w '900' -ta 'l' -fg '" ++ myNormalFGColor ++ "' -bg '" ++ myNormalBGColor ++ "' -fn '" ++ myFont ++ "' " ++ myEvents
+--myStatusBar = "/usr/local/bin/dzen2 -x '400' -y '0' -h '16' -w '900' -ta 'l' -fg '" ++ myNormalFGColor ++ "' -bg '" ++ myNormalBGColor ++ "' -fn '" ++ myFont ++ "' " ++ myEvents
+myStatusBar = "/home/trevorj/.bin/dzen2 -x '400' -y '0' -h '16' -w '900' -ta 'l' -fg '" ++ myNormalFGColor ++ "' -bg '" ++ myNormalBGColor ++ "' -fn '" ++ myFont ++ "' " ++ myEvents
 myLogHook_dzen2 h = dynamicLogWithPP $ defaultPP {
 	  ppCurrent  = dzenColor "#222222" "white" . pad
 	, ppVisible  = dzenColor "white" "black" . pad
@@ -245,7 +246,7 @@ myConfig = ewmh gnomeConfig
 	{ manageHook = myManageHook <+> manageHook gnomeConfig
 	, layoutHook = mylayoutHook
 	, modMask = mod4Mask
-	, terminal = "gnome-terminal"
+	, terminal = "sakura"
 	--, keys = \c -> azertyKeys c `M.union` keys gnomeConfig c
 	, workspaces = ["sh", "web", "todo", "four", "five", "six", "seven", "eight", "nine"]
 	{-, normalBorderColor   = colorNormalBorder-}
@@ -263,7 +264,7 @@ myStartupHook = do
   --spawnOnce "hamster-indicator"
   --spawnOnce "hamster-time-tracker"
   --spawnOnce "pidgin"
-  --spawnOnce "gnome-terminal"
+  --spawnOnce "sakura"
   --spawnOnce "~/.bin/chromium-browser"
   --spawnOnce "cairo-compmgr"
 
