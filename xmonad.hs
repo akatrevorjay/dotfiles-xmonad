@@ -51,11 +51,13 @@ import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.EwmhDesktops
 
 import XMonad.Util.Run
+import XMonad.Util.Cursor
+import XMonad.Util.SpawnOnce
 --import XMonad.Util.Run(spawnPipe, hPutStrLn)
 import XMonad.Util.EZConfig
 import XMonad.Util.Themes
 --import XMonad.Util.Scratchpad
-import XMonad.Util.Dzen
+--import XMonad.Util.Dzen
 
 import Data.Ratio((%))
 import Data.Monoid
@@ -80,9 +82,12 @@ myManageHook = composeAll
 	-- , className =? "Vmware"			--> doFullFloat
 	, className =? "Unity-2d-panel"	--> doIgnore
 	, className =? "Unity-2d-launcher" --> doIgnore
+    , className =? "Conky" --> doIgnore
 	, className =? "xmobar" --> doIgnore
 	, className =? "dzen2" --> doIgnore
 	, className =? "Guake.py" --> doFloat
+    , className =? "processing-app-Base" --> doFloat
+    , className =? "Xfce4-notifyd" --> doIgnore
 	, isFullscreen --> doFullFloat
 	, isDialog --> doCenterFloat
 	]
@@ -250,14 +255,29 @@ myConfig = ewmh gnomeConfig
 	`additionalKeysP` myEZKeysP
 	`additionalKeys` myEZKeys
 
+myStartupHook = do
+  setDefaultCursor xC_pirate
+  --spawnOnce "/home/trevorj/.bin/polaris.py"
+  --spawnOnce "/home/trevorj/.bin/pydzen.py"
+  --spawnOnce "gtg"
+  --spawnOnce "hamster-indicator"
+  --spawnOnce "hamster-time-tracker"
+  --spawnOnce "pidgin"
+  --spawnOnce "gnome-terminal"
+  --spawnOnce "~/.bin/chromium-browser"
+  --spawnOnce "cairo-compmgr"
 
 
 main = do
-	dzen <- spawnPipe myStatusBar
+	-- dzen <- spawnPipe myStatusBar
+	-- polaris <- spawnPipe "python /home/trevorj/.bin/polaris.py"
+	-- pydzen <- spawnPipe "python /home/trevorj/.bin/pydzen.py"
 	xmonad $ myConfig {
 		-- logHook = myLogHook_dzenstatus dzen >> logHook desktopConfig
-		logHook = myLogHook_dzen2 dzen >> logHook desktopConfig
+		-- logHook = myLogHook_dzen2 dzen >> logHook desktopConfig
 		-- logHook = myLogHook_xmobar xmproc >> logHook desktopConfig
+		-- borderWidth = 1
+		startupHook = myStartupHook
 		}
 
 
